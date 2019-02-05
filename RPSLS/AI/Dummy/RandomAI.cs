@@ -1,11 +1,10 @@
 ﻿namespace RPSLS
 {
-    class RandomAI : BaseAI
+    class RandomAI : DummyAI
     {
         public RandomAI()
         {
             Nickname = "Gambler";
-            CourseSection = Section.Dummy;
         }
 
         public override Move Play()

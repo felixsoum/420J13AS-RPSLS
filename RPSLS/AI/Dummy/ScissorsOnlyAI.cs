@@ -1,11 +1,10 @@
 ﻿namespace RPSLS
 {
-    public class ScissorsOnlyAI : BaseAI
+    public class ScissorsOnlyAI : DummyAI
     {
         public ScissorsOnlyAI()
         {
             Nickname = "Cut Man";
-            CourseSection = Section.Dummy;
         }
 
         public override Move Play()

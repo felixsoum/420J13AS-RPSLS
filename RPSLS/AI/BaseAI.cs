@@ -5,9 +5,8 @@ namespace RPSLS
     public abstract class BaseAI
     {
         static Move[] possibleMoves;
-        static Random random = new Random();
-        public string Nickname { get; set; }
-        public Section CourseSection { get; set; }
+        static Random random = new Random(2019);
+        public string Nickname { get; set; } = "???";
 
         public abstract Move Play();
 
@@ -26,7 +25,7 @@ namespace RPSLS
             return Nickname;
         }
 
-        public string GetAuthor()
+        public virtual string GetAuthor()
         {
             return GetType().Name;
         }

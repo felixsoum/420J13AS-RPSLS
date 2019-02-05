@@ -1,6 +1,6 @@
 ﻿namespace RPSLS
 {
-    class GenericOneAI : BaseAI
+    class GenericOneAI : DummyAI
     {
         readonly Move favoriteMove;
 
@@ -8,7 +8,6 @@
         {
             favoriteMove = RandomMove();
             Nickname = $"{favoriteMove} Enthusiast";
-            CourseSection = Section.Dummy;
         }
 
         public override Move Play()

@@ -44,10 +44,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\BaseAI.cs" />
+    <Compile Include="AI\DummyAI.cs" />
     <Compile Include="AI\Dummy\RandomAI.cs" />
     <Compile Include="AI\Dummy\GenericOneAI.cs" />
     <Compile Include="AI\Dummy\RockOnlyAI.cs" />
     <Compile Include="AI\Dummy\ScissorsOnlyAI.cs" />
+    <Compile Include="AI\S07049\BOLU05.cs" />
+    <Compile Include="AI\S07049\PAQ02.cs" />
+    <Compile Include="AI\S07049\GORT08.cs" />
+    <Compile Include="AI\S07049\HEMC06.cs" />
+    <Compile Include="AI\S07049\JEAA07.cs" />
+    <Compile Include="AI\S07049\MEKY05.cs" />
+    <Compile Include="AI\S07049\MELB06.cs" />
+    <Compile Include="AI\S07049\NOLR08.cs" />
+    <Compile Include="AI\S07049\OUGY00.cs" />
+    <Compile Include="AI\S07049\VERD00.cs" />
+    <Compile Include="AI\StudentAI.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Move.cs" />
     <Compile Include="Game\MoveComparator.cs" />

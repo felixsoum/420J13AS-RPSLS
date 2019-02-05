@@ -2,7 +2,7 @@
 {
     public enum Section
     {
-        Dummy,
+        None,
         S07049,
         S07248,
         S07249

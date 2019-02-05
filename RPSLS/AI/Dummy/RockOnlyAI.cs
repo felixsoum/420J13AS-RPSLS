@@ -1,11 +1,10 @@
 ﻿namespace RPSLS
 {
-    public class RockOnlyAI : BaseAI
+    public class RockOnlyAI : DummyAI
     {
         public RockOnlyAI()
         {
             Nickname = "Rock Lee";
-            CourseSection = Section.Dummy;
         }
 
         public override Move Play()
