@@ -25,5 +25,10 @@ namespace RPSLS
         {
             return Nickname;
         }
+
+        public string GetAuthor()
+        {
+            return GetType().Name;
+        }
     }
 }

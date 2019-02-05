@@ -1,11 +1,19 @@
 ﻿using System;
+using System.IO;
 
 namespace RPSLS
 {
     public static class Game
     {
         public static bool IsLogging { get; set; } = true;
+        static string LogPath;
+        const int RoundMax = 100;
         static string log;
+
+        static Game()
+        {
+            LogPath = Path.Combine("..", "..", "..", "BattleLog.txt");
+        }
 
         public static int Battle(BaseAI ai1, BaseAI ai2)
         {
@@ -14,9 +22,9 @@ namespace RPSLS
             int ai1WinCount = 0;
             int ai2WinCount = 0;
             log = "";
-            Log($"{ai1} ({ai1.GetType()}) VS {ai2} ({ai2.GetType()}):\n");
+            Log($"{ai1} ({ai1.GetAuthor()}) VS {ai2} ({ai2.GetAuthor()}):\n");
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < RoundMax; i++)
             {
                 move1 = ai1.Play();
                 move2 = ai2.Play();
@@ -38,25 +46,27 @@ namespace RPSLS
                         break;
                 }
             }
-
-            Log($"{ai1} won {ai1WinCount} rounds and {ai2} won {ai2WinCount} rounds.\n");
+            string outcomeMessage = $"{ai1} won {ai1WinCount} rounds and {ai2} won {ai2WinCount} rounds.\n";
 
             if (ai1WinCount > ai2WinCount)
             {
-                Log($"{ai1} ({ai1.GetType()}) defeats {ai2} ({ai2.GetType()})!\n");
+                outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) defeats {ai2} ({ai2.GetAuthor()})!\n";
             }
             else if (ai1WinCount < ai2WinCount)
             {
-                Log($"{ai2} ({ai2.GetType()}) defeats {ai1} ({ai1.GetType()})!\n");
+                outcomeMessage += $"{ai2} ({ai2.GetAuthor()}) defeats {ai1} ({ai1.GetAuthor()})!\n";
             }
             else
             {
-                Log($"{ai1} ({ai1.GetType()}) ties with {ai2} ({ai2.GetType()})!\n");
+                outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) ties with {ai2} ({ai2.GetAuthor()})!\n";
             }
+            Log(outcomeMessage);
 
             if (IsLogging)
             {
-                Console.WriteLine(log);
+                Console.Write(outcomeMessage);
+                Console.WriteLine($"Please see log at {Path.GetFullPath(LogPath)} for more details.");
+                WriteToFile();
             }
 
             return ai1WinCount.CompareTo(ai2WinCount);
@@ -68,6 +78,11 @@ namespace RPSLS
             {
                 log += message;
             }
+        }
+
+        static void WriteToFile()
+        {
+            File.WriteAllLines(LogPath, new string[] { log });
         }
     }
 }

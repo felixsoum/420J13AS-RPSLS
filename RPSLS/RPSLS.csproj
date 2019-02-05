@@ -44,17 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\BaseAI.cs" />
+    <Compile Include="AI\Dummy\RandomAI.cs" />
     <Compile Include="AI\Dummy\GenericOneAI.cs" />
     <Compile Include="AI\Dummy\RockOnlyAI.cs" />
     <Compile Include="AI\Dummy\ScissorsOnlyAI.cs" />
     <Compile Include="Game\Game.cs" />
     <Compile Include="Game\Move.cs" />
     <Compile Include="Game\MoveComparator.cs" />
-    <Compile Include="Outcome.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Section.cs" />
-    <Compile Include="StudentAI.cs" />
+    <Compile Include="AI\Section.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
