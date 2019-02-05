@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace RPSLS.AI.S07250
+namespace RPSLS
 {
-    class BHOA08 : StudentAI
+    class BHOA : StudentAI
     {
-        public BHOA08()
+        public BHOA()
         {
         }
 

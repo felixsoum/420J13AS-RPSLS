@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPSLS.AI.S07250
+namespace RPSLS
 {
     class NGUH : StudentAI
     {
