@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RPSLS
 {
-    enum Section
+    public enum Section
     {
-        Teacher,
+        Dummy,
         S07049,
         S07248,
         S07249
