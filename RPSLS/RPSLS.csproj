@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AI\BaseAI.cs" />
     <Compile Include="AI\DummyAI.cs" />
+    <Compile Include="AI\Dummy\PaperOnlyAI.cs" />
     <Compile Include="AI\Dummy\RandomAI.cs" />
     <Compile Include="AI\Dummy\GenericOneAI.cs" />
     <Compile Include="AI\Dummy\RockOnlyAI.cs" />
