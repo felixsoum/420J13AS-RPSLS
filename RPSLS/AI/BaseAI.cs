@@ -15,6 +15,20 @@ namespace RPSLS
             possibleMoves = (Move[])(Enum.GetValues(typeof(Move)));
         }
 
+        public BaseAI()
+        {
+            if (Game.Mutex > 0)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            else
+            {
+                Game.IncrementMutex();
+            }
+        }
+
+        public virtual void Observe(Move opponentMove) { }
+
         protected Move RandomMove()
         {
             return possibleMoves[random.Next(possibleMoves.Length)];
