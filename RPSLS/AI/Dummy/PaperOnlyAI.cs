@@ -1,4 +1,4 @@
-﻿namespace RPSLS.AI.Dummy
+﻿namespace RPSLS
 {
     class PaperOnlyAI : DummyAI
     {

@@ -5,7 +5,7 @@ namespace RPSLS
     public abstract class BaseAI
     {
         static Move[] possibleMoves;
-        static Random random = new Random(2019);
+
         public string Nickname { get; set; } = "???";
 
         public abstract Move Play();
@@ -31,7 +31,7 @@ namespace RPSLS
 
         protected Move RandomMove()
         {
-            return possibleMoves[random.Next(possibleMoves.Length)];
+            return possibleMoves[Game.SeededRandom.Next(possibleMoves.Length)];
         }
 
         public override string ToString()

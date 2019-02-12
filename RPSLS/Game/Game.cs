@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RPSLS
 {
     public sealed class Game
     {
-        public static bool IsLogging { get; set; } = true;
+        public bool IsLogging { get; set; } = true;
         static string LogPath;
         const int RoundMax = 100;
         static string log;
+        static List<string> fullLog = new List<string>();
         static bool isInstantiated;
         public static int Mutex { get; private set; }
+        public static Random SeededRandom { get; private set; }
 
         static Game()
         {
@@ -38,8 +41,7 @@ namespace RPSLS
 
             int ai1WinCount = 0;
             int ai2WinCount = 0;
-            log = "";
-            Log($"{ai1} ({ai1.GetAuthor()}) VS {ai2} ({ai2.GetAuthor()}):\n");
+            Log($"{ai1} ({ai1.GetAuthor()}) VS {ai2} ({ai2.GetAuthor()}):\n", true);
 
             for (int i = 0; i < RoundMax; i++)
             {
@@ -78,39 +80,60 @@ namespace RPSLS
 
             if (ai1WinCount > ai2WinCount)
             {
-                outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) defeats {ai2} ({ai2.GetAuthor()})!\n";
+                outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) defeats {ai2} ({ai2.GetAuthor()})!\n\n";
             }
             else if (ai1WinCount < ai2WinCount)
             {
-                outcomeMessage += $"{ai2} ({ai2.GetAuthor()}) defeats {ai1} ({ai1.GetAuthor()})!\n";
+                outcomeMessage += $"{ai2} ({ai2.GetAuthor()}) defeats {ai1} ({ai1.GetAuthor()})!\n\n";
             }
             else
             {
-                outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) ties with {ai2} ({ai2.GetAuthor()})!\n";
+                outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) ties with {ai2} ({ai2.GetAuthor()})!\n\n";
             }
-            Log(outcomeMessage);
+
+            Log(outcomeMessage, true);
 
             if (IsLogging)
             {
-                Console.Write(outcomeMessage);
-                Console.WriteLine($"Please see log at {Path.GetFullPath(LogPath)} for more details.");
-                WriteToFile();
+                fullLog.Add(log);
             }
 
             return ai1WinCount.CompareTo(ai2WinCount);
         }
 
-        void Log(string message)
+        public void SetBattleCount(int n)
+        {
+            log = "";
+            Log($"Battle {n} ================================================================\n", true);
+        }
+
+        public void StartLog()
+        {
+            if (IsLogging)
+            {
+                fullLog.Clear();
+            }
+        }
+
+        public void Log(string message, bool andPrint = false)
         {
             if (IsLogging)
             {
                 log += message;
             }
+            if (andPrint)
+            {
+                Console.Write(message);
+            }
         }
 
-        void WriteToFile()
+        public void WriteToFile()
         {
-            File.WriteAllLines(LogPath, new string[] { log });
+            if (IsLogging)
+            {
+                Console.WriteLine($"Please see log at {Path.GetFullPath(LogPath)} for more details.");
+                File.WriteAllLines(LogPath, fullLog);
+            }
         }
 
         public void ResetMutex()
@@ -121,6 +144,11 @@ namespace RPSLS
         public static void IncrementMutex()
         {
             Mutex++;
+        }
+
+        public void SetSeed(int seed)
+        {
+            SeededRandom = new Random(seed);
         }
     }
 }
