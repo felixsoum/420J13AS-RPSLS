@@ -6,11 +6,14 @@ namespace RPSLS
     {
         public NGUH()
         {
+            Nickname = "JayHng";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Scissors;
         }
+    
     }
 }

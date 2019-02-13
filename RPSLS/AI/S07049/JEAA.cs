@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public JEAA()
         {
+            Nickname = "paper";
+            CourseSection = Section.S07049;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
         }
     }
 }

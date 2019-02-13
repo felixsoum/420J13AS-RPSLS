@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public FRAP()
         {
+            Nickname = "Dummy AI";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Paper;
         }
     }
 }

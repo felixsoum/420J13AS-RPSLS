@@ -2,6 +2,6 @@
 {
     public abstract class StudentAI : BaseAI
     {
-        protected Section CourseSection { get; set; }
+        public Section CourseSection { get; set; } = Section.None;
     }
 }

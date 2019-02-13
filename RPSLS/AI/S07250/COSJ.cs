@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public COSJ()
         {
+            Nickname = "CosmoBot";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Lizard;
         }
     }
 }

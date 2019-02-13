@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public BHOA()
         {
+            Nickname = "WelcomeToChillies";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Lizard;
         }
     }
 }

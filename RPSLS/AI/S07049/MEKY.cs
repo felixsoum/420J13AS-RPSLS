@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public MEKY()
         {
+            Nickname = "Saitama";
+            CourseSection = Section.S07049;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Spock;
         }
     }
 }

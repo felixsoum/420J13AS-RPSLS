@@ -6,11 +6,15 @@ namespace RPSLS
     {
         public FLOA()
         {
+            Nickname = "Sora";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
+
+            
         }
     }
 }

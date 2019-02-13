@@ -6,11 +6,15 @@ namespace RPSLS
     {
         public LEPA()
         {
+            Nickname = "GrisWoldDiablo";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            //Move randomMove = (Move)new Random().Next(((Move[])Enum.GetValues(typeof(Move))).Length);
+
+            return RandomMove();
         }
     }
 }

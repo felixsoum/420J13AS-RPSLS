@@ -6,11 +6,21 @@ namespace RPSLS
     {
         public MEIB()
         {
+            Nickname = "JusBieberFan";
+            CourseSection = Section.S07250;
+
+
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
+
+            /* paper-->(Rock,Spock) & rock--> (Lizard,Scissor) & lizard(Paper,Spock) & spock(Rock,Scissor) & scissor(Paper,Lizard) */
+
+
+
+
         }
     }
 }

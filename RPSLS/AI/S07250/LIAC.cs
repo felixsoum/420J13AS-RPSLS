@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public LIAC()
         {
+            Nickname = "AThumb";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Scissors;
         }
     }
 }
