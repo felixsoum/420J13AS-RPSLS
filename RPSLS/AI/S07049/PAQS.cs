@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public PAQS()
         {
+            CourseSection = Section.S07049;
+            Nickname = "The Master Chief";
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Spock;
         }
     }
 }

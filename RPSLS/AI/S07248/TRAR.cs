@@ -4,13 +4,20 @@ namespace RPSLS
 {
     class TRAR : StudentAI
     {
+       
+
         public TRAR()
         {
+            Nickname = "Robert";
+            CourseSection = Section.S07248;
+
         }
+
+        
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
         }
     }
 }

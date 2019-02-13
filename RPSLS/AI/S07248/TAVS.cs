@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public TAVS()
         {
+            Nickname = "Origami";
+            CourseSection = Section.S07248;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return Move.Paper;
         }
     }
 }

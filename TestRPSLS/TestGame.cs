@@ -6,28 +6,37 @@ namespace TestRPSLS
     [TestClass]
     public class TestGame
     {
+        Game game;
+
         [TestInitialize]
         public void Initialize()
         {
-            Game.IsLogging = false;
+            game = Game.Create<RockOnlyAI>();
+            game.IsLogging = false;
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            game.End();
         }
 
         [TestMethod]
         public void TestBattleWin()
         {
-            Assert.AreEqual(1, Game.Battle(new RockOnlyAI(), new ScissorsOnlyAI()));
+            Assert.AreEqual(1, game.Battle<ScissorsOnlyAI>());
         }
 
         [TestMethod]
         public void TestBattleLose()
         {
-            Assert.AreEqual(-1, Game.Battle(new ScissorsOnlyAI(), new RockOnlyAI()));
+            Assert.AreEqual(-1, game.Battle<PaperOnlyAI>());
         }
 
         [TestMethod]
         public void TestBattleTie()
         {
-            Assert.AreEqual(0, Game.Battle(new RockOnlyAI(), new RockOnlyAI()));
+            Assert.AreEqual(0, game.Battle<RockOnlyAI>());
         }
     }
 }

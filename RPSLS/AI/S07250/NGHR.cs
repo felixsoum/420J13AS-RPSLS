@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public NGHR()
         {
+            Nickname = "FinalExam";
+            CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
         }
     }
 }

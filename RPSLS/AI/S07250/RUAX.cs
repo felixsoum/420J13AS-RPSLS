@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public RUAX()
         {
+	        CourseSection = Section.S07250;
+	        Nickname = "Ruan Xun";
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+	        return Move.Paper;
         }
     }
 }

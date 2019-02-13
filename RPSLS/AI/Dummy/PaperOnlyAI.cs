@@ -1,6 +1,6 @@
 ﻿namespace RPSLS
 {
-    class PaperOnlyAI : DummyAI
+    public class PaperOnlyAI : DummyAI
     {
         public PaperOnlyAI()
         {

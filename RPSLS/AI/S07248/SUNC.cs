@@ -6,11 +6,14 @@ namespace RPSLS
     {
         public SUNC()
         {
+            Nickname = "Chengyu Sun";
+
         }
 
         public override Move Play()
         {
-            throw new System.NotImplementedException();
+
+            return Move.Paper;
         }
     }
 }

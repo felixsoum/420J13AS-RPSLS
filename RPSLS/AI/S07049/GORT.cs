@@ -6,11 +6,14 @@ namespace RPSLS
     {
         public GORT()
         {
+            Nickname = "Inhuman Rat";
+            CourseSection = Section.S07049;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            
+            return RandomMove();
         }
     }
 }

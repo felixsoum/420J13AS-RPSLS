@@ -4,13 +4,16 @@ namespace RPSLS
 {
     class CHEB : StudentAI
     {
+        
         public CHEB()
         {
+            Nickname = "Baiyang Chen";
+            CourseSection = Section.S07248;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
         }
     }
 }

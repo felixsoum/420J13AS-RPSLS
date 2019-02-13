@@ -6,11 +6,14 @@ namespace RPSLS
     {
         public ZHAQ()
         {
+            Nickname = "Sutton";
+            CourseSection = Section.S07248;
+
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
         }
     }
 }

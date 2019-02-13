@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public ZHAS()
         {
+            Nickname = "Potato";
+            CourseSection = Section.S07248;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+            return RandomMove();
         }
     }
 }

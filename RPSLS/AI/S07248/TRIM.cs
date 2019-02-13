@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace RPSLS
 {
@@ -6,11 +6,13 @@ namespace RPSLS
     {
         public TRIM()
         {
+			this.Nickname = "Minh";
+			this.CourseSection = Section.S07248;
         }
 
         public override Move Play()
         {
-            throw new NotImplementedException();
+			return RandomMove();
         }
     }
 }
