@@ -254,9 +254,12 @@ namespace RPSLS
             int studentCount = contestants.Count;
             Console.WriteLine($"\n{studentCount} students entered in tournament.\n");
 
+            int dummyIndex = 0;
+            var dummyTypes = new Type[] { typeof(RockOnlyAI), typeof(GenericOneAI), typeof(CircularAI)};
             for (int i = 0; i < studentCount; i++)
             {
-                contestants.Add(new Contestant(typeof(GenericOneAI), "", "", Section.None));
+                dummyIndex %= dummyTypes.Length;
+                contestants.Add(new Contestant(dummyTypes[dummyIndex++], "", "", Section.None));
             }
 
             Contestant c1 = null;
