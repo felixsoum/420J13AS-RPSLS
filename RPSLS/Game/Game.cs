@@ -218,7 +218,7 @@ namespace RPSLS
                 player1 = CreateStudentAI();
                 player2 = CreateAI<T>();
                 SetBattleCount(i + 1);
-                if (Battle(CreateStudentAI(), player2) != 1)
+                if (Battle(player1, player2) != 1)
                 {
                     isSuccess = false;
                 }
