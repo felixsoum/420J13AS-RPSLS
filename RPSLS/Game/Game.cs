@@ -57,7 +57,7 @@ namespace RPSLS
                 {
                     ai1.Observe(prevMove2.Value);
                 }
-                move1 = ai1.Play();
+                move1 = ClampMove(ai1.Play());
                 stopWatch.Stop();
                 ai1LongestTurn = (int)stopWatch.ElapsedMilliseconds;
                 stopWatch.Reset();
@@ -67,7 +67,7 @@ namespace RPSLS
                 {
                     ai2.Observe(prevMove1.Value);
                 }
-                move2 = ai2.Play();
+                move2 = ClampMove(ai2.Play());
                 stopWatch.Stop();
                 ai2LongestTurn = (int)stopWatch.ElapsedMilliseconds;
                 stopWatch.Reset();
@@ -311,6 +311,15 @@ namespace RPSLS
                     }
                 }
             }
+        }
+
+        Move ClampMove(Move move)
+        {
+            if (move < Move.Rock || move > Move.Lizard)
+            {
+                return Move.Rock;
+            }
+            return move;
         }
     }
 }
