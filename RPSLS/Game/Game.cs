@@ -16,7 +16,7 @@ namespace RPSLS
         static bool isInstantiated;
         public static int Mutex { get; private set; }
         public static Random SeededRandom { get; private set; }
-        const int Seed = 2019;
+        const int Seed = 7260208;
         const int BattleCount = 20;
         readonly Type studentAI;
 

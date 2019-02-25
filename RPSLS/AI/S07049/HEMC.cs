@@ -1,107 +1,170 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RPSLS
 {
     class HEMC : StudentAI
     {
-        //List.//
-        public List<string> plays = new List<string>();
+        const int ROCK = 0;
+        const int PAPER = 1;
+        const int SCISSORS = 2;
+        const int LIZARD = 3;
+        const int SPOCK = 4;
+ 
+        List<int> a = new List<int>();
+        static readonly Move b;
+        private static Random c = Game.SeededRandom;
 
-       
-        public HEMC()
-        { 
-            Nickname = "Leprauchaun 1.0";
+
+        public HEMC()  
+        {
+            Nickname = "Leprauchaun 2.0";
+            CourseSection = Section.S07049;
         }
 
         public override Move Play()
         {
-            ////make a list, check how many of each, return vs one that's higher.//
-            ////plays.Add(getmove);
-            //if(plays.Count < 0)
-            //{
+            int indexMove = resultsPercentage();
+            if (a.Count < 0)
+            {
+                return RandomMove();
+            }
 
-            //    return RandomMove();
-            //}
+            if (indexMove == ROCK)
+            {
+                int[] Array = { 1, 2 };
+                int randomIndex = c.Next(1, 2);
+                int randomValue = Array[randomIndex];
 
-            return Move.Lizard;
+                if (randomValue == 1){return Move.Paper;}
+                if (randomValue == 2){return Move.Spock;}
+            }
+            if (indexMove == PAPER)
+            {
+                int[] Array = { 1, 2 };
+                int randomIndex = c.Next(1, 2);
+                int randomValue = Array[randomIndex];
+
+                if (randomValue == 1){return Move.Scissors;}
+                if (randomValue == 2){return Move.Lizard;}
+            }
+            if (indexMove == SCISSORS) 
+            {
+                int[] Array = { 1, 2 };
+                int randomIndex = c.Next(1, 2);
+                int randomValue = Array[randomIndex];
+
+                if (randomValue == 1){return Move.Rock;}
+                if (randomValue == 2){return Move.Spock;}
+            }
+            if (indexMove == LIZARD) 
+            {
+                int[] Array = { 1, 2 };
+                int randomIndex = c.Next(1, 2);
+                int randomValue = Array[randomIndex];
+
+                if (randomValue == 1){return Move.Scissors;}
+                if (randomValue == 2){return Move.Rock;}
+            }
+            if (indexMove == SPOCK)
+            {
+                int[] Array = { 1, 2 };
+                int randomIndex = c.Next(1, 2);
+                int randomValue = Array[randomIndex];
+
+                if (randomValue == 1){return Move.Paper;}
+                if (randomValue == 2){return Move.Lizard;}
+            }
+
+
+            return RandomMove();
         }
 
-        //private int rockPlays()
-        //{
-        //    int rockCount = 0;
-        //    foreach(string Rock in plays.FindAll(x => x=="Rock"))
-        //    {
-        //        rockCount++;
-        //    }
+        private int resultsPercentage()
+        {
+            int rock;   
+            int paper;  
+            int scissors;  
+            int lizard;  
+            int spock;   
 
-        //    return rockCount;
-        //}
+            int[] resultsB = new int[5];
 
-        //private int paperPlays()
-        //{
-        //    int paperCount = 0;
-        //    foreach (string Paper in plays.FindAll(x => x == "Paper"))
-        //    {
-        //        paperCount++;
-        //    }
+            
+            rock = rockResults();
+            paper = paperResults();
+            scissors = scissorsResults();
+            lizard = lizardResults();
+            spock = spockResults();
 
-        //    return paperCount;
-        //}
+            resultsB[ROCK] = rock;
+            resultsB[PAPER] = paper;
+            resultsB[SCISSORS] = scissors;
+            resultsB[LIZARD] = lizard;
+            resultsB[SPOCK] = spock;
 
-        //private int ScissorsPlays()
-        //{
-        //    int scissorsCount = 0;
-        //    foreach (string Scissors in plays.FindAll(x => x == "Scissors"))
-        //    {
-        //        scissorsCount++;
-        //    }
+            int m = resultsB.Max();
+            int p = Array.IndexOf(resultsB, m);
+            return p;
+        }
 
-        //    return scissorsCount;
-        //}
+        public override void Observe(Move opponentMove)
+        {
+            int prevMov = (int) opponentMove;
+            a.Add(prevMov);
+        }
+       
+        private int rockResults()      
+        {
+            int rockCount = 0;
+            foreach (var Rock in a.FindAll(x => x == 0))
+            {
+                rockCount++;
+            }
+            
+            return rockCount;
+            
+        }
+        private int paperResults()       
+        {
+            int paperCount = 0;
+            foreach (var Paper in a.FindAll(x => x == 1))
+            {
+                paperCount++;
+            }
 
-        //private int lizardPlays()
-        //{
-        //    int lizardCount = 0;
-        //    foreach (string Lizard in plays.FindAll(x => x == "Lizard"))
-        //    {
-        //        lizardCount++;
-        //    }
+            return paperCount;
+        }
+        private int scissorsResults()       
+        {
+            int scissorsCount = 0;
+            foreach (var Scissors in a.FindAll(x => x == 2))
+            {
+                scissorsCount++;
+            }
 
-        //    return lizardCount;
-        //}
+            return scissorsCount;
+        }
+        private int spockResults()       
+        {
+            int spockCount = 0;
+            foreach (var Spock in a.FindAll(x => x == 3))
+            {
+                spockCount++;
+            }
 
-        //private int SpockPlays()
-        //{
-        //    int spockCount = 0;
-        //    foreach (string Spock in plays.FindAll(x => x == "Spock"))
-        //    {
-        //        spockCount++;
-        //    }
+            return spockCount;
+        }
+        private int lizardResults()       
+        {
+            int lizardCount = 0;
+            foreach (var Lizard in a.FindAll(x => x == 4))
+            {
+                lizardCount++;
+            }
 
-        //    return spockCount;
-        //}
-
-        //private void playsPercentage()
-        //{
-        //    int rock = 0;
-        //    int paper = 0;
-        //    int scissors = 0;
-        //    int lizard = 0;
-        //    int spock = 0;
-        //    int total = 0;
-
-        //    rock = rockPlays();
-        //    paper = paperPlays();
-        //    scissors = ScissorsPlays();
-        //    lizard = lizardPlays();
-        //    spock = SpockPlays();
-
-        //    total = rock + paper + scissors + lizard + spock;
-
-
-
-
-        //}
+            return lizardCount;
+        }
     }
 }

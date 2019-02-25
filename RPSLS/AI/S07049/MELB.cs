@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 namespace RPSLS
 {
     class MELB : StudentAI
@@ -7,39 +7,52 @@ namespace RPSLS
         public MELB()
         {
             Nickname = "Nanith Omicron";
-            //The best selection obviously .
+            a = 69420;
             CourseSection = Section.S07049;
         }
-        int funnynumber = 69;
-        int turn = 1;
-        public override Move Play()
+        int a = 0;
+        int b = 1;
+        int c = 0;
+ 
+
+        Move counterMove(Move z)
         {
+            int ah = (int)z - 1;
+            ah %= 5; return (Move)ah;
+        }
 
+        Move[] lol= new Move[3];
 
-            if (turn == 1) Start();
-//----------------------------------------------------------------//
-            turn++;
-            if (funnynumber == 69)
-            {
-                funnynumber = 420;
-                return Move.Spock;
-            }
+        public override void Observe(Move opponentMove)
+        {               
            
-            else
-            {
-
-                funnynumber = 69;
-                return Move.Paper;
-                
-            }
+            for (int i = 1; i < lol.Length; i++)
+                lol[i - 1] = lol[i];
+            lol[lol.Length - 1] = opponentMove;
+            if (b <= 2) return;
+            if (((int)lol[0] + (int)lol[1] + (int)lol[2]) / 3 == (int)lol[0]) c = 1;
+            if (lol[2] == (counterMove(lol[1])))
+                ok++;
+            if (ok >= 3) { c = 2; rr = (int)opponentMove;  }
           
         }
-
-        void Start()
+        int ok = 0;
+        int rr = 0;
+        public override Move Play()
         {
+            b++;
+            if (b % 10 == 0) return RandomMove();
 
-         // For future "disrupting" function :   )
+            if (b == 1) Console.WriteLine("Nanith Omicron: From now on, Alea iacta est. There is little to no random tho. /n");
+            if (b <= 2)
+                return Move.Scissors;
+
+            if (c == 1)
+                return counterMove(lol[1] - 1);
+            else return counterMove((Move)rr++ + 1);
+
         }
+ 
     
     }
 }
