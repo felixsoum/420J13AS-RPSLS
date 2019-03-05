@@ -14,11 +14,11 @@ namespace RPSLS
         {
             var game = Game.Create<RandomAI>();
 
-            //game.Challenge<RockOnlyAI>();
-            //game.Challenge<GenericOneAI>();
-            //game.Challenge<CircularAI>();
+            game.Challenge<FavoriteOneAI>();
+            game.Challenge<FavoriteTwoAI>();
+            game.Challenge<RepeaterAI>();
 
-            game.PlayTournament();
+            //game.PlayTournament();
 
             game.End();
         }

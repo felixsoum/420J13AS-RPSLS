@@ -13,7 +13,7 @@ namespace RPSLS
         int a = 0;
         int b = 1;
         int c = 0;
- 
+
 
         Move counterMove(Move z)
         {
@@ -21,11 +21,11 @@ namespace RPSLS
             ah %= 5; return (Move)ah;
         }
 
-        Move[] lol= new Move[3];
+        Move[] lol = new Move[3];
 
         public override void Observe(Move opponentMove)
-        {               
-           
+        {
+
             for (int i = 1; i < lol.Length; i++)
                 lol[i - 1] = lol[i];
             lol[lol.Length - 1] = opponentMove;
@@ -33,8 +33,8 @@ namespace RPSLS
             if (((int)lol[0] + (int)lol[1] + (int)lol[2]) / 3 == (int)lol[0]) c = 1;
             if (lol[2] == (counterMove(lol[1])))
                 ok++;
-            if (ok >= 3) { c = 2; rr = (int)opponentMove;  }
-          
+            if (ok >= 3) { c = 2; rr = (int)opponentMove; }
+
         }
         int ok = 0;
         int rr = 0;
@@ -52,7 +52,7 @@ namespace RPSLS
             else return counterMove((Move)rr++ + 1);
 
         }
- 
-    
+
+
     }
 }

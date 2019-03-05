@@ -85,5 +85,14 @@ namespace TestRPSLS
             Assert.AreEqual(1, Move.Rock.CompareWith(Move.Scissors));
             Assert.AreEqual(-1, Move.Scissors.CompareWith(Move.Rock));
         }
+
+        [TestMethod]
+        public void TestInvalid()
+        {
+            Move invalid = (Move)(-1);
+            Assert.AreEqual(0, invalid.CompareTo(invalid));
+            Assert.AreEqual(1, Move.Rock.CompareTo(invalid));
+            Assert.AreEqual(-1, invalid.CompareTo(Move.Rock));
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace RPSLS
         static bool isInstantiated;
         public static int Mutex { get; private set; }
         public static Random SeededRandom { get; private set; }
-        const int Seed = 7260208;
+        const int Seed = 2019;
         const int BattleCount = 20;
         readonly Type studentAI;
 
@@ -106,7 +106,6 @@ namespace RPSLS
             {
                 outcomeMessage += $"{ai1} ({ai1.GetAuthor()}) ties with {ai2} ({ai2.GetAuthor()})!\n\n";
             }
-
             if (ai1LongestTurn > 10)
             {
                 outcomeMessage += $"{ai1} is disqualified because longest turn took {ai1LongestTurn}ms!\n\n";
@@ -255,7 +254,7 @@ namespace RPSLS
             Console.WriteLine($"\n{studentCount} students entered in tournament.\n");
 
             int dummyIndex = 0;
-            var dummyTypes = new Type[] { typeof(RockOnlyAI), typeof(GenericOneAI), typeof(CircularAI)};
+            var dummyTypes = new Type[] { typeof(FavoriteOneAI), typeof(FavoriteTwoAI), typeof(RepeaterAI)};
             for (int i = 0; i < studentCount; i++)
             {
                 dummyIndex %= dummyTypes.Length;

@@ -46,9 +46,12 @@
     <Compile Include="AI\BaseAI.cs" />
     <Compile Include="AI\DummyAI.cs" />
     <Compile Include="AI\Dummy\CircularAI.cs" />
+    <Compile Include="AI\Dummy\FavoriteOneAI.cs" />
+    <Compile Include="AI\Dummy\FavoriteTwoAI.cs" />
     <Compile Include="AI\Dummy\PaperOnlyAI.cs" />
     <Compile Include="AI\Dummy\RandomAI.cs" />
     <Compile Include="AI\Dummy\GenericOneAI.cs" />
+    <Compile Include="AI\Dummy\RepeaterAI.cs" />
     <Compile Include="AI\Dummy\RockOnlyAI.cs" />
     <Compile Include="AI\Dummy\ScissorsOnlyAI.cs" />
     <Compile Include="AI\S07049\BOLU.cs" />
