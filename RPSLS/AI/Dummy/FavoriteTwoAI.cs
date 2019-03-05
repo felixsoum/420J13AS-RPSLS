@@ -45,7 +45,7 @@ class FavoriteTwoAI : DummyAI
             }
         }
 
-        int half = (100 - moves.Count) / 2;
+        int half = (100 + moves.Count) / 2;
 
         while (moves.Count < half)
         {
