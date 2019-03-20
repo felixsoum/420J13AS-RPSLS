@@ -14,9 +14,9 @@ namespace RPSLS
         {
             var game = Game.Create<RandomAI>();
 
-            game.Challenge<FavoriteOneAI>();
-            game.Challenge<FavoriteTwoAI>();
-            game.Challenge<RepeaterAI>();
+            game.Challenge<MarkovOneAI>();
+            game.Challenge<MarkovTwoAI>();
+            game.Challenge<ShakespeareAI>();
 
             //game.PlayTournament();
 

@@ -236,6 +236,10 @@ namespace RPSLS
                     try
                     {
                         StudentAI studentAI = (StudentAI)CreateAI(type);
+                        if (studentAI.IsDisqualified)
+                        {
+                            continue;
+                        }
                         studentAI.Play();
                         if (studentAI.CourseSection == Section.None)
                         {
@@ -255,10 +259,12 @@ namespace RPSLS
 
             int dummyIndex = 0;
             var dummyTypes = new Type[] { typeof(FavoriteOneAI), typeof(FavoriteTwoAI), typeof(RepeaterAI)};
-            for (int i = 0; i < studentCount; i++)
+            Type currentDummyType = null;
+            for (int i = 0; i < studentCount * 9; i++)
             {
                 dummyIndex %= dummyTypes.Length;
-                contestants.Add(new Contestant(dummyTypes[dummyIndex++], "", "", Section.None));
+                currentDummyType = dummyTypes[dummyIndex++];
+                contestants.Add(new Contestant(currentDummyType, currentDummyType.Name, "", Section.None));
             }
 
             Contestant c1 = null;
@@ -281,7 +287,7 @@ namespace RPSLS
                 }
             }
 
-            for (int i = contestants.Count - 1; i >= studentCount; i--)
+            for (int i = contestants.Count - 1; i >= studentCount * 9; i--)
             {
                 contestants.RemoveAt(i);
             }
