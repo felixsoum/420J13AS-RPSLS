@@ -10,9 +10,11 @@ class MarkovOneAI : DummyAI
         Nickname = "Markov";
 
         prev = RandomMove();
+
+        Shuffle();
         for (int i = 0; i < 5; i++)
         {
-            weightedMoves[i] = RandomMove();
+            weightedMoves[i] = shuffledMoves[i];
         }
     }
 
@@ -35,7 +37,7 @@ class MarkovOneAI : DummyAI
         double chance = Game.SeededRandom.NextDouble();
         for (int i = 0; i < 4; i++)
         {
-            if (chance < (i + 1) * 0.12)
+            if (chance < (i + 1) * 0.1)
             {
                 return moves[i];
             }

@@ -14,9 +14,10 @@ class MarkovTwoAI : DummyAI
 
         for (int j = 0; j < 5; j++)
         {
+            Shuffle();
             for (int i = 0; i < 5; i++)
             {
-                weightedMoves[i, j] = RandomMove();
+                weightedMoves[i, j] = shuffledMoves[i];
             }
         }
     }
