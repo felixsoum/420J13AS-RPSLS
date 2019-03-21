@@ -35,7 +35,7 @@ class MarkovOneAI : DummyAI
         double chance = Game.SeededRandom.NextDouble();
         for (int i = 0; i < 4; i++)
         {
-            if (chance < (i + 1) * 0.15)
+            if (chance < (i + 1) * 0.12)
             {
                 return moves[i];
             }
