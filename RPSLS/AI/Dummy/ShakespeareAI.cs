@@ -1,4 +1,5 @@
 ﻿using RPSLS;
+using System.Collections.Generic;
 
 class ShakespeareAI : DummyAI
 {
@@ -19,23 +20,36 @@ class ShakespeareAI : DummyAI
     You should live twice, in it, and in my rhyme.
     ";
 
+    List<Move> sequence;
+
     int index;
 
     public ShakespeareAI()
     {
         Nickname = "William Shakespeare";
-        index = Game.SeededRandom.Next(SonnetXVII.Length);
+        sequence = CreateSequence();
+        index = Game.SeededRandom.Next(sequence.Count);
+    }
+
+    public static List<Move> CreateSequence()
+    {
+        var list = new List<Move>();
+        foreach (char c in SonnetXVII)
+        {
+            if (c >= 'A' && c <= 'z')
+            {
+                list.Add(CharToMove(c));
+            }
+        }
+        return list;
     }
 
     public override Move Play()
     {
-        index %= SonnetXVII.Length;
-        while (SonnetXVII[index] < 'A' || SonnetXVII[index] > 'z')
-        {
-            index++;
-            index %= SonnetXVII.Length;
-        }
-        return Game.SeededRandom.NextDouble() > 0.2 ? CharToMove(SonnetXVII[index++]) : RandomMove();
+        index %= sequence.Count;
+        Move move = Game.SeededRandom.NextDouble() > 0.5 ? sequence[index] : RandomMove();
+        index++;
+        return move;
     }
 
     public static Move CharToMove(char c)
