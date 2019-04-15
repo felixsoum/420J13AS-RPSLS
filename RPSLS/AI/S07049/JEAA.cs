@@ -5,36 +5,37 @@ namespace RPSLS
 {
     class JEAA : StudentAI
     {
-        int a = -1;
-        Queue<MoveConection> b = new Queue<MoveConection>(5);
-        Dictionary<Move,MoveConection> c; 
+        int roundCount = -1;
+        //Move[] lastMoves = new Move[5] ;
+        Queue<MoveConection> lastmoves = new Queue<MoveConection>(5);
+        Dictionary<Move,MoveConection> connections; 
 
         public JEAA()
         {
             Nickname = "paper";
             CourseSection = Section.S07049;
-            c = new Dictionary<Move, MoveConection>(5);
-            c.Add(Move.Paper, new MoveConection(Move.Paper, Move.Rock, Move.Spock, Move.Scissors, Move.Lizard));
-            c.Add(Move.Rock, new MoveConection(Move.Rock, Move.Lizard, Move.Scissors, Move.Paper, Move.Spock));
-            c.Add(Move.Lizard, new MoveConection(Move.Lizard, Move.Spock, Move.Paper, Move.Rock, Move.Scissors));
-            c.Add(Move.Spock, new MoveConection(Move.Spock, Move.Scissors, Move.Rock, Move.Lizard, Move.Paper));
-            c.Add(Move.Scissors, new MoveConection(Move.Scissors, Move.Paper, Move.Lizard, Move.Spock, Move.Rock));
+            connections = new Dictionary<Move, MoveConection>(5);
+            connections.Add(Move.Paper, new MoveConection(Move.Paper, Move.Rock, Move.Spock, Move.Scissors, Move.Lizard));
+            connections.Add(Move.Rock, new MoveConection(Move.Rock, Move.Lizard, Move.Scissors, Move.Paper, Move.Spock));
+            connections.Add(Move.Lizard, new MoveConection(Move.Lizard, Move.Spock, Move.Paper, Move.Rock, Move.Scissors));
+            connections.Add(Move.Spock, new MoveConection(Move.Spock, Move.Scissors, Move.Rock, Move.Lizard, Move.Paper));
+            connections.Add(Move.Scissors, new MoveConection(Move.Scissors, Move.Paper, Move.Lizard, Move.Spock, Move.Rock));
         }
 
         public override Move Play()
         {
             
-            if(++a<1)
+            if(++roundCount<1)
             {
                 return RandomMove();
             }
-            else if(a<6)
+            else if(roundCount<6)
             {
-                return b.GetLast().GetWin();
+                return lastmoves.GetLast().GetWin();
             }
             else
             {
-                int k = (int)b.GetLast().Move + GetTrend();
+                int k = (int)lastmoves.GetLast().Move + GetTrend();
                 if (k>4)
                 {
                     k -= 5;
@@ -43,14 +44,14 @@ namespace RPSLS
                 {
                     k += 5;
                 }
-                return c[(Move)k].GetWin();
+                return connections[(Move)k].GetWin();
                 
             }
         }
 
         private int GetTrend()
         {
-            MoveConection[] moves= b.GetValues();
+            MoveConection[] moves= lastmoves.GetValues();
             int[] diffs = new int[moves.Length-1];
             for(int i=0;i<diffs.Length;i++)
             {
@@ -77,7 +78,7 @@ namespace RPSLS
         public override void Observe(Move opponentMove)
         {
             
-            b.Add(c[opponentMove]);
+            lastmoves.Add(connections[opponentMove]);
         }
 
         #region classes
@@ -85,6 +86,7 @@ namespace RPSLS
         class MoveConection
         {
             
+            //int moveID;
             Move move;
             Move[] win;
             Move[] lose;
@@ -94,10 +96,18 @@ namespace RPSLS
             public MoveConection(Move move,Move win1,Move win2,Move lose1,Move lose2)
             {
                 this.Move = move;
+                //moveID = (int)move+1;
                 win = new Move[] { win1, win2 };
                 lose = new Move[] { lose1, lose2 };
             }
 
+            //public Move GetCommonWin(Move compare)
+            //{
+            //    foreach(Move m in win)
+            //    {
+
+            //    }
+            //}
             public static int Compare(MoveConection first,MoveConection second)
             {
                 return first.Compare(second);

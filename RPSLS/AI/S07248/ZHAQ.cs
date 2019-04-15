@@ -4,10 +4,10 @@ namespace RPSLS
 {
     class ZHAQ : StudentAI
     {
-        private Move a;
-        private Move b;
-        private Move[] c = { Move.Scissors, Move.Paper, Move.Rock, Move.Lizard, Move.Spock };
-        private int d;
+        int[,,] data = new int[5, 5, 5];
+        Move? previousMove = null;
+        Move? previousMove2 = null;
+
 
         public ZHAQ()
         {
@@ -16,55 +16,62 @@ namespace RPSLS
 
         }
 
-        public override Move Play()
-        {
-            return a;
-        }
-
         public override void Observe(Move opponentMove)
         {
-            
-            if ( b == opponentMove)
+            if (previousMove.HasValue)
             {
-                
-              if (opponentMove == Move.Rock)
-                {
-                    a = Move.Paper;
-                }
-                else if (opponentMove == Move.Scissors)
-                {
-                    a = Move.Rock;
-                }
-                else if (opponentMove == Move.Spock)
-                {
-                    a = Move.Lizard;
-                }
-                else if (opponentMove == Move.Lizard)
-                {
-                    a = Move.Rock;
-                }
-                else if (opponentMove == Move.Paper)
-                {
-                    a = Move.Scissors;
-                }
+                data[(int)previousMove,(int)previousMove2,(int)opponentMove]++;
+            }
+            previousMove = previousMove2;
+            previousMove2 = opponentMove;
+        }
 
-                
+
+        public override Move Play()
+        {
+            if (!previousMove.HasValue || !previousMove2.HasValue)
+            {
+                return RandomMove();
             }
             else
-            {  
-                   for (int i = 0; i <c.Length; i++)
-                  {
-                    if(c[i] == opponentMove)
-                    {
-                        d = i;
-                    }
-                  }
+            {
+                Move frequentMove = Move.Rock;
+                int frequentMoveCount = -1;
 
-                  d++;
-                  a = c[d-1];
+                for (int i = 0; i < 5; i++)
+                {
+                    int currentCount = data[(int)previousMove,(int)previousMove2, i];
+                    if(currentCount > frequentMoveCount)
+                    {
+                        frequentMove = (Move)i;
+                        frequentMoveCount = currentCount;
+                    }
+                }
+
+                switch (frequentMove)
+                {
+
+
+
+                    case Move.Rock:
+                    case Move.Scissors:
+                        return Move.Spock;
+                       
+                    case Move.Paper:
+                    case Move.Lizard:
+                        return Move.Scissors;
+
+                    case Move.Spock:
+                        return Move.Lizard;
+
+                    default:
+                        return RandomMove();
+
+                }
 
             }
-            b = opponentMove;
         }
+
+
     }
 }

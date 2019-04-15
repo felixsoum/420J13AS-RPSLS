@@ -2,96 +2,63 @@
 {
     class CHEB : StudentAI
     {
-        Move a;
-        int b = 0;
+        int [,,] data = new int[5,5,5];
+        Move? prev = null; //Nullable
+        Move? prev2 = Move.Rock;
+
+
         public CHEB()
         {
             Nickname = "Baiyang Chen";
             CourseSection = Section.S07248;
         }
 
+        
         public override Move Play()
         {
-
-            if (a is Move.Rock)
+            if (!prev.HasValue)
             {
-                b++;
-                if (b >= 2)
+                return RandomMove();
+            }
+            else
+            {
+                Move bestMove=Move.Rock;
+                int bestCount = -1;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        int currentCount = data[(int)prev,(int)prev2, i];
+                        if (currentCount > bestCount)
+                        {
+                            bestMove = (Move)i;
+                            bestCount = currentCount;
+                        }
+                    }
+                
+
+                switch (bestMove)
                 {
-                    return Move.Paper;
-                }
-                else
-                {
-                    return Move.Rock;
+                    case Move.Rock:
+                    case Move.Scissors:
+                        return Move.Spock;
+                    case Move.Paper:
+                    case Move.Lizard:
+                        return Move.Scissors;
+                    case Move.Spock:
+                        return Move.Lizard;
+                    default:
+                        return Move.Lizard;
                 }
             }
-            b = 0;
-            if (a is Move.Paper)
-            {
-                b++;
-                if (b >= 2)
-                {
-                    return Move.Scissors;
-
-                }
-                else
-                {
-                    return Move.Paper;
-
-                }
-            }
-            b = 0;
-            if (a is Move.Spock)
-            {
-                b++;
-                if (b >= 2)
-                {
-                    return Move.Lizard;
-
-                }
-                else
-                {
-                    return Move.Rock;
-
-                }
-            }
-            b = 0;
-            if (a is Move.Lizard)
-            {
-                if (b >= 2)
-                {
-                    return Move.Scissors;
-
-                }
-                else
-                {
-                    return Move.Lizard;
-
-                }
-            }
-            b = 0;
-            if (a is Move.Scissors)
-            {
-                if (b >= 2)
-                {
-                    return Move.Rock;
-
-                }
-                else
-                {
-                    return Move.Lizard;
-
-                }
-            }
-            return RandomMove();
         }
 
         public override void Observe(Move opponentMove)
         {
-            a = opponentMove;
-            base.Observe(opponentMove);
+            if (prev.HasValue)
+            {
+                data[(int)prev, (int) prev2, (int)opponentMove]++; 
+            }
+            prev = prev2;
+            prev2 = opponentMove;
         }
-
-
     }
 }

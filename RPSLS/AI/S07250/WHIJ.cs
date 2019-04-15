@@ -3,26 +3,40 @@ namespace RPSLS
 {
     class WHIJ : StudentAI
     {
-        Move? a = null;
-        Move b;
-        Move c;
+        Move? oppLastMove = null;
+        Move oppNextMove;
+        Move myMove;
 
-        private bool d;
+        Move mostPlayedMove = Move.Rock;
+        Move secondMostPlayedMove = Move.Rock;
+
+        int[] moveCount = new int[5];
+        int mostPlayedCount = 0;
+
+        //[0] = Rock,
+        //[1] = Paper
+        //[2] = Scissors
+        //[3] = Spock
+        //[4] = Lizard
 
         public WHIJ()
         {
             Nickname = "neverfirst";
             CourseSection = Section.S07250;
         }
+
         private int CheckWin()
         {
-            switch (c.CompareWith(b))
+            switch (myMove.CompareWith(oppNextMove))
             {
                 case 0:
+                    //tieCount++;
                     return 0;
                 case 1:
+                    //winCount++;
                     return 1;
                 case -1:
+                    //loseCount++;
                     return -1;
                 default:
                     return 1;
@@ -31,109 +45,55 @@ namespace RPSLS
 
         public override Move Play()
         {
-            if (a.HasValue)
+            if (oppLastMove.HasValue)
             {
-                if (b.Equals(a))
+
+                for (int i = 0; i < 5; i++)
                 {
-                    d = false;
+                    if (moveCount[i] > (mostPlayedCount)) //mostplayedmove? 
+                    {
+                        mostPlayedMove = (Move)i; //(Move)i;
+                        
+                        mostPlayedCount = moveCount[i];
+                        
+                    }
+                    
                 }
-                else if (!b.Equals(a) && CheckWin() == 1)
+               // Console.WriteLine("MOst played : "+ mostPlayedMove);
+                switch (mostPlayedMove)
                 {
-                    d = true;
+                    case Move.Rock:
+                    case Move.Spock:
+                        return Move.Paper;
+                    case Move.Lizard:
+                    case Move.Paper:
+                        return Move.Scissors;
+                    case Move.Scissors:
+                        return Move.Rock;
+                    default:
+                        break;
                 }
-                else if (!b.Equals(a) && CheckWin() == -1)
-                {
-                    d = false;
-                }
-                return c;
+            }
+
+            return Move.Paper;
+        }
+
+        public override void Observe(Move opponentMove)
+        {
+            if (oppLastMove.HasValue)
+            {
+                oppLastMove = opponentMove;
+                moveCount[(int)oppLastMove]++;
             }
             else
             {
-                return Move.Paper;
+                oppLastMove = opponentMove;
             }
-        }
-        public override void Observe(Move opponentMove)
-        {
-            a = b;
-            b = opponentMove;
 
-            int rand;
-            if (!d)
-            {
-                switch (opponentMove)
-                {
-                    case Move.Rock:
-                        rand = Game.SeededRandom.Next(2);
-                        if (rand == 1)
-                        {
-                            c = Move.Spock;
-                            break;
-                        }
-                        c = Move.Paper;
-                        break;
-                    case Move.Paper:
-                        rand = Game.SeededRandom.Next(2);
-                        if (rand == 1)
-                        {
-                            c = Move.Lizard;
-                            break;
-                        }
-                        c = Move.Scissors;
-                        break;
-                    case Move.Scissors:
-                        rand = Game.SeededRandom.Next(2);
-                        if (rand == 1)
-                        {
-                            c = Move.Spock;
-                            break;
-                        }
-                        c = Move.Rock;
-                        break;
-                    case Move.Spock:
-                        rand = Game.SeededRandom.Next(2);
-                        if (rand == 1)
-                        {
-                            c = Move.Lizard;
-                            break;
-                        }
-                        c = Move.Paper;
-                        break;
-                    case Move.Lizard:
-                        rand = Game.SeededRandom.Next(2);
-                        if (rand == 1)
-                        {
-                            c = Move.Scissors;
-                            break;
-                        }
-                        c = Move.Rock;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else if (d)
-            {
-                switch (opponentMove)
-                {
-                    case Move.Rock:
-                        c = Move.Rock;
-                        break;
-                    case Move.Paper:
-                        c = Move.Paper;
-                        break;
-                    case Move.Scissors:
-                        c = Move.Scissors;
-                        break;
-                    case Move.Spock:
-                        c = Move.Spock;
-                        break;
-                    case Move.Lizard:
-                        c = Move.Lizard;
-                        break;
-                    default:
-                        break;
-                }
-            }
+
+            // oppLastMove = oppNextMove;
+            // oppNextMove = opponentMove;
+            //int rand;
         }
     }
 }

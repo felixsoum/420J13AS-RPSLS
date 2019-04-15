@@ -1,69 +1,56 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace RPSLS
 {
     class HASN : StudentAI
     {
-        Move a;
-        List<Move> b = new List<Move>();
+        int[] history = new int[5];
 
         public HASN()
         {
-            Nickname = "Ligma";
+            Nickname = "Sugma";
             CourseSection = Section.S07250;
         }
 
         public override Move Play()
         {
-            if (b.Count > 1 && b[0] != b[1])
+            Move mostPlayedMove = Move.Rock;
+            int mostPlayedCount = history[0];
+
+            for (int i = 1; i < 5; i++)
             {
-                if (a == Move.Scissors)
+                if (history[i] > mostPlayedCount)
                 {
-                    return Move.Scissors;
-                }
-                else if (a == Move.Paper)
-                {
-                    return Move.Paper;
-                }
-                else if (a == Move.Rock)
-                {
-                    return Move.Rock;
-                }                
-                else if (a == Move.Lizard)
-                {
-                    return Move.Lizard;
-                }
-                else
-                {
-                    return Move.Spock;
+                    mostPlayedMove = (Move)i;
+                    mostPlayedCount = history[i];
                 }
             }
-            else
-            {
-                if (a == Move.Rock || a == Move.Scissors)
-                {
-                    return Move.Spock;
-                }
-                else if (a == Move.Paper || a == Move.Lizard)
-                {
-                    return Move.Scissors;
-                }
-                else if (a == Move.Spock)
-                {
-                    return Move.Paper;
-                }
-                else
-                {
-                    return RandomMove();
-                }
-            }                
-        }
 
+            switch (mostPlayedMove)
+            {
+                default:
+                case Move.Rock:          
+                        return Move.Spock;
+
+                case Move.Spock:
+                        return Move.Paper;
+              
+                case Move.Lizard:
+                        return Move.Scissors;
+
+                case Move.Paper:
+                        return Move.Lizard;
+    
+                case Move.Scissors:
+                        return Move.Rock;
+
+            }
+
+        }
         public override void Observe(Move opponentMove)
         {
-            a = opponentMove;
-            b.Add(a);     
+            history[(int)opponentMove]++;
         }
     }
 }

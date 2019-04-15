@@ -6,6 +6,8 @@ namespace RPSLS
     {
         public MEDA()
         {
+            IsDisqualified = true;
+
             Nickname = "Rasputin";
             CourseSection = Section.S07250;
         }

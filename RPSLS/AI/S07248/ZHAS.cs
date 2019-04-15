@@ -5,8 +5,10 @@ namespace RPSLS
 {
     class ZHAS : StudentAI
     {
-        private Move? a = null;
-        List<Move> b = new List<Move>();
+        int[,] dataMarkovOne = new int[5, 5];
+        int[,,] dataMarkovTwo = new int[5, 5, 5];
+        Move? prev; //? is the Nullable operator
+        Move? prevPrev;
 
         public ZHAS()
         {
@@ -14,54 +16,62 @@ namespace RPSLS
             CourseSection = Section.S07248;
         }
 
-        public override void Observe(Move opponentMove)
-        {
-            a = opponentMove;
-            if(b.Count < 2)
-            {
-                b.Add(a.Value);
-            }
-        }
-
         public override Move Play()
         {
-            if(b.Count >= 2)
+            if (prevPrev.HasValue && prev.HasValue)
             {
-                if (b[0] != b[1])
+                Move bestMove = Move.Rock;
+                int bestCount = -1;
+
+                for (int i = 0; i < 5; i++)
                 {
-                    return a.Value;
-                }
-                else
-                {
-                    switch (a.Value)
+                    //MarkovOne
+                    //int currentCount = dataMarkovOne[(int)prev, i];
+
+                    //MarkovTwo
+                    int currentCount = dataMarkovTwo[(int)prevPrev, (int)prev, i];
+
+                    if (currentCount > bestCount)
                     {
-                        case Move.Rock:
-                        case Move.Scissors:
-                            return Move.Spock;
-                        case Move.Paper:
-                        case Move.Lizard:
-                            return Move.Scissors;
-                        case Move.Spock:
-                        default:
-                            return Move.Paper;
+                        bestMove = (Move)i;
+                        bestCount = currentCount;
                     }
+                }
+                switch (bestMove)
+                {
+                    case Move.Rock:
+                    default:
+                        return Move.Paper;
+                    case Move.Paper:
+                        return Move.Scissors;
+                    case Move.Scissors:
+                        return Move.Spock;
+                    case Move.Spock:
+                        return Move.Lizard;
+                    case Move.Lizard:
+                        return Move.Rock;
+
                 }
             }
             else
             {
-                switch (a)
-                {
-                    case Move.Rock:
-                    case Move.Scissors:
-                        return Move.Spock;
-                    case Move.Paper:
-                    case Move.Lizard:
-                        return Move.Scissors;
-                    case Move.Spock:
-                    default:
-                        return Move.Paper;
-                }
+                return RandomMove();
             }
+        }
+
+        public override void Observe(Move opponentMove)
+        {
+            if (prev.HasValue && prevPrev.HasValue)
+            {
+                //MarkovTwo
+                dataMarkovTwo[(int)prevPrev, (int)prev, (int)opponentMove]++;
+
+                //MarkovOne
+                //dataMarkovOne[(int)prev, (int)opponentMove]++;
+            }
+            prevPrev = prev;
+            prev = opponentMove;
         }
     }
 }
+

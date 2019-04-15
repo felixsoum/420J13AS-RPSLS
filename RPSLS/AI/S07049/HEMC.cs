@@ -6,165 +6,115 @@ namespace RPSLS
 {
     class HEMC : StudentAI
     {
-        const int ROCK = 0;
-        const int PAPER = 1;
-        const int SCISSORS = 2;
-        const int LIZARD = 3;
-        const int SPOCK = 4;
- 
-        List<int> a = new List<int>();
-        static readonly Move b;
-        private static Random c = Game.SeededRandom;
+        #region Variables.
+        //Variables.//
+        private const int ROCK = 0;
+        private const int PAPER = 1;
+        private const int SCISSORS = 2;
+        private const int SPOCK = 3;
+        private const int LIZARD = 4;
+        private const int HIGHESTVALUE = 5;
 
+        int[] ResultPrevMove = new int[5];
+        List<int> AllMoves = new List<int>();
 
-        public HEMC()  
+        int[][] move = new int[5][] //Thanks Alonso.//
         {
-            Nickname = "Leprauchaun 2.0";
+            new int[5],
+            new int[5],
+            new int[5],
+            new int[5],
+            new int[5]
+        };
+
+        private int previousMove;
+
+        #endregion
+        public HEMC()
+        {
+            Nickname = "The Leprauchaun 3.0";
             CourseSection = Section.S07049;
-        }
-
-        public override Move Play()
-        {
-            int indexMove = resultsPercentage();
-            if (a.Count < 0)
-            {
-                return RandomMove();
-            }
-
-            if (indexMove == ROCK)
-            {
-                int[] Array = { 1, 2 };
-                int randomIndex = c.Next(1, 2);
-                int randomValue = Array[randomIndex];
-
-                if (randomValue == 1){return Move.Paper;}
-                if (randomValue == 2){return Move.Spock;}
-            }
-            if (indexMove == PAPER)
-            {
-                int[] Array = { 1, 2 };
-                int randomIndex = c.Next(1, 2);
-                int randomValue = Array[randomIndex];
-
-                if (randomValue == 1){return Move.Scissors;}
-                if (randomValue == 2){return Move.Lizard;}
-            }
-            if (indexMove == SCISSORS) 
-            {
-                int[] Array = { 1, 2 };
-                int randomIndex = c.Next(1, 2);
-                int randomValue = Array[randomIndex];
-
-                if (randomValue == 1){return Move.Rock;}
-                if (randomValue == 2){return Move.Spock;}
-            }
-            if (indexMove == LIZARD) 
-            {
-                int[] Array = { 1, 2 };
-                int randomIndex = c.Next(1, 2);
-                int randomValue = Array[randomIndex];
-
-                if (randomValue == 1){return Move.Scissors;}
-                if (randomValue == 2){return Move.Rock;}
-            }
-            if (indexMove == SPOCK)
-            {
-                int[] Array = { 1, 2 };
-                int randomIndex = c.Next(1, 2);
-                int randomValue = Array[randomIndex];
-
-                if (randomValue == 1){return Move.Paper;}
-                if (randomValue == 2){return Move.Lizard;}
-            }
-
-
-            return RandomMove();
-        }
-
-        private int resultsPercentage()
-        {
-            int rock;   
-            int paper;  
-            int scissors;  
-            int lizard;  
-            int spock;   
-
-            int[] resultsB = new int[5];
-
-            
-            rock = rockResults();
-            paper = paperResults();
-            scissors = scissorsResults();
-            lizard = lizardResults();
-            spock = spockResults();
-
-            resultsB[ROCK] = rock;
-            resultsB[PAPER] = paper;
-            resultsB[SCISSORS] = scissors;
-            resultsB[LIZARD] = lizard;
-            resultsB[SPOCK] = spock;
-
-            int m = resultsB.Max();
-            int p = Array.IndexOf(resultsB, m);
-            return p;
         }
 
         public override void Observe(Move opponentMove)
         {
-            int prevMov = (int) opponentMove;
-            a.Add(prevMov);
+            move[previousMove][(int)opponentMove]++; //Automatically adds each previous move to the corresponding index.//
+            AllMoves.Add((int)opponentMove); //Fill in results - List//
+            ResultFill((int)opponentMove); //Fill in results - Array[5]//
+
+            previousMove = (int)opponentMove;
         }
-       
-        private int rockResults()      
+
+        #region Results
+        private int MostPlayedResult()
         {
-            int rockCount = 0;
-            foreach (var Rock in a.FindAll(x => x == 0))
+            return Array.IndexOf(ResultPrevMove, ResultPrevMove.Max()); //Finds the highest array and returns the index of the highest one.//
+        }
+
+        private void ResultFill(int prevMove) //Increases each the value of each index corresponding to a move played.//
+        {
+            switch (prevMove)
             {
-                rockCount++;
+                case ROCK: ResultPrevMove[ROCK]++;
+                    break;
+
+                case PAPER: ResultPrevMove[PAPER]++;
+                    break;
+
+                case SCISSORS: ResultPrevMove[SCISSORS]++;
+                    break;
+
+                case SPOCK: ResultPrevMove[SPOCK]++;
+                    break;
+
+                case LIZARD: ResultPrevMove[LIZARD]++;
+                    break;
             }
-            
-            return rockCount;
-            
         }
-        private int paperResults()       
+        #endregion
+
+        public override Move Play()
         {
-            int paperCount = 0;
-            foreach (var Paper in a.FindAll(x => x == 1))
+            //return indexPlay(MostPlayedResult()); //Return the move played result to the index.//
+            return (Move)MarkovTest();
+        }
+
+        #region Plays
+        private Move indexPlay(int indexMove) //Depending on which move that's the most played, will play against that move.//
+        {
+            switch (indexMove)
             {
-                paperCount++;
+                case ROCK: return RockMove();
+                case PAPER: return PaperMove();
+                case SCISSORS: return ScissorsMove();
+                case SPOCK: return SpockMove();
+                case LIZARD: return SpockMove();
+
+                default: return RandomMove();
+            }
+        }
+
+        private Move RandomPlays(Move move1, Move move2) { return Game.SeededRandom.NextDouble() > 0.5 ? move1 : move2; } //Thank you Felix.// //Plays against the other move randomly against its 2 weaknessess.//
+
+        private Move SpockMove() { return RandomPlays(Move.Paper, Move.Lizard); }
+        private Move LizardMove() { return RandomPlays(Move.Scissors, Move.Rock); }
+        private Move ScissorsMove() {return RandomPlays(Move.Rock, Move.Spock); }
+        private Move PaperMove() { return RandomPlays(Move.Scissors, Move.Lizard); }
+        private Move RockMove() { return RandomPlays(Move.Paper, Move.Spock); }
+
+        #endregion
+        private int MarkovTest()
+        {
+            int Move = Array.IndexOf(move[previousMove], move[previousMove].Max());
+            Move++;
+
+            if(Move == HIGHESTVALUE)
+            {
+                Move -= HIGHESTVALUE;
             }
 
-            return paperCount;
+            return Move;
         }
-        private int scissorsResults()       
-        {
-            int scissorsCount = 0;
-            foreach (var Scissors in a.FindAll(x => x == 2))
-            {
-                scissorsCount++;
-            }
 
-            return scissorsCount;
-        }
-        private int spockResults()       
-        {
-            int spockCount = 0;
-            foreach (var Spock in a.FindAll(x => x == 3))
-            {
-                spockCount++;
-            }
-
-            return spockCount;
-        }
-        private int lizardResults()       
-        {
-            int lizardCount = 0;
-            foreach (var Lizard in a.FindAll(x => x == 4))
-            {
-                lizardCount++;
-            }
-
-            return lizardCount;
-        }
     }
 }

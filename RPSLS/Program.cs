@@ -12,13 +12,21 @@ namespace RPSLS
     {
         static void Main(string[] args)
         {
-            var game = Game.Create<RandomAI>();
+            var game = Game.Create<LastSolution>();
 
-            game.Challenge<MarkovOneAI>();
-            game.Challenge<MarkovTwoAI>();
-            game.Challenge<ShakespeareAI>();
+            //game.Challenge<RockOnlyAI>();
+            //game.Challenge<GenericOneAI>();
+            //game.Challenge<CircularAI>();
 
-            //game.PlayTournament();
+            //game.Challenge<FavoriteOneAI>();
+            //game.Challenge<FavoriteTwoAI>();
+            //game.Challenge<RepeaterAI>();
+
+            //game.Challenge<MarkovOneAI>();
+            //game.Challenge<MarkovTwoAI>();
+            //game.Challenge<ShakespeareAI>();
+
+            game.PlayTournament();
 
             game.End();
         }

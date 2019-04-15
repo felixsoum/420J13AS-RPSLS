@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RPSLS
 {
     class FRAP : StudentAI
     {
-        private Move? a = null;
-        private Move? b = null;
-        private bool c = false;
-        private bool d = false;
-        private int e = 0;
+        private int[,,] data = new int[5, 5, 5];
+
+        private Move? opponentLastMove = null;
+        private Move? opponentTwoMovesAgo = null;
+        private Move? opponentThreeMovesAgo = null;
+
         public FRAP()
         {
             Nickname = "Dummy AI";
@@ -17,131 +20,102 @@ namespace RPSLS
 
         public override Move Play()
         {
-            LostPrevRound();
+            Move opponentNextMove = RandomMove();
 
-            if (c && !d  )
+            if (opponentLastMove != null && opponentTwoMovesAgo != null)
             {
-                b = a;
-                return (Move)b;
-            }
+                int bestCount = -1;
 
-            else if (d)
-            {
-                b = RandomMove();
-                return (Move)b;
-            }
-
-            else
-            {
-                if (a.HasValue)
+                for (int i = 0; i < 5; i++)
                 {
-                    int rand = Game.SeededRandom.Next(2);
+                    int currentCount = data[(int)opponentTwoMovesAgo, (int)opponentLastMove, i];
 
-                    switch (a.Value)
+                    if (currentCount > bestCount)
                     {
-                        case Move.Rock:
-                            if (rand == 0)
-                            {
-                                b = Move.Paper;
-                                return Move.Paper;
-                            }
-                            else
-                            {
-                                b = Move.Spock;
-                                return Move.Spock;
-                            }
-                        case Move.Paper:
-                            if (rand == 0)
-                            {
-                                b = Move.Scissors;
-                                return Move.Scissors;
-                            }
-                            else
-                            {
-                                b = Move.Lizard;
-                                return Move.Lizard;
-                            }
-                        case Move.Scissors:
-                            if (rand == 0)
-                            {
-                                b = Move.Spock;
-                                return Move.Spock;
-                            }
-                            else
-                            {
-                                b = Move.Rock;
-                                return Move.Rock;
-                            }
-                        case Move.Spock:
-                            if (rand == 0)
-                            {
-                                b = Move.Lizard;
-                                return Move.Lizard;
-                            }
-                            else
-                            {
-                                b = Move.Paper;
-                                return Move.Paper;
-                            }
-                        case Move.Lizard:
-                            if (rand == 0)
-                            {
-                                b = Move.Rock;
-                                return Move.Rock;
-                            }
-                            else
-                            {
-                                b = Move.Scissors;
-                                return Move.Scissors;
-                            }
-                        default:
-                            b = RandomMove();
-                            return (Move)b;
+                        bestCount = currentCount;
+                        opponentNextMove = (Move)i;
                     }
                 }
-
-                else
-                {
-                    b = RandomMove();
-                    return (Move)b;
-                }
             }
+
+            int rand = Game.SeededRandom.Next(2);
+
+
+            switch (opponentNextMove)
+            {
+                case Move.Rock:
+                    if (rand == 0)
+                    {
+                        return Move.Paper;
+                    }
+                    else
+                    {
+                        return Move.Spock;
+                    }
+                case Move.Paper:
+                    if (rand == 0)
+                    {
+                        return Move.Scissors;
+                    }
+                    else
+                    {
+                        return Move.Lizard;
+                    }
+                case Move.Scissors:
+                    if (rand == 0)
+                    {
+                        return Move.Spock;
+                    }
+                    else
+                    {
+                        return Move.Rock;
+                    }
+                case Move.Spock:
+                    if (rand == 0)
+                    {
+                        return Move.Lizard;
+                    }
+                    else
+                    {
+                        return Move.Paper;
+                    }
+                case Move.Lizard:
+                    if (rand == 0)
+                    {
+                        return Move.Rock;
+                    }
+                    else
+                    {
+                        return Move.Scissors;
+                    }
+                default:
+                    return RandomMove();
+            }
+
         }
 
         public override void Observe(Move opponentMove)
         {
-            a = opponentMove;
-        }
-
-        public void LostPrevRound()
-        {
-            if (b.HasValue && a.HasValue)
+            if (opponentTwoMovesAgo != null)
             {
-                switch (((Move)b).CompareWith((Move)a))
-                {
-                    case 0:
-                        e++;
-                        break;
-                    case 1:
-                        break;
-                    case -1:
-                        e++;
-                        break;
-                    default:
-                        break;
-                }
+                opponentThreeMovesAgo = opponentTwoMovesAgo;
+            }
 
-                if (e > 1 && e < 5)
-                {
-                    c = true;
-                }
+            if (opponentLastMove != null)
+            {
+                opponentTwoMovesAgo = opponentLastMove;
+            }
 
-                else if (e >= 5)
-                {
-                    c = false;
-                    d = true;
-                }
+            opponentLastMove = opponentMove;
+
+            if (opponentLastMove != null && opponentTwoMovesAgo != null && opponentThreeMovesAgo != null)
+            {
+                data[(int)opponentThreeMovesAgo, (int)opponentTwoMovesAgo, (int)opponentLastMove]++;
             }
         }
     }
 }
+
+
+
+   

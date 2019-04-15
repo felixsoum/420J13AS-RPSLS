@@ -11,7 +11,8 @@ namespace RPSLS
         public string Section { get; set; } = "07250";
 
         public PISB()
-        {          
+        {
+            IsDisqualified = true;
         }
 
         public override Move Play()

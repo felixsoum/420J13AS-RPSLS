@@ -4,9 +4,13 @@ namespace RPSLS
 {
     class COSJ : StudentAI
     {
-        private Move a;
-        private Move b;
-        
+        private int[,] markovCount = new int[5, 5];
+        private int[,,] markovcountTwo = new int[5, 5, 5];
+        private Move _oponentMove;
+        private Move _oponentMovePlus;
+        private Move _opponentMovePlusPlus;
+        private int round = 1;
+
         public COSJ()
         {
             Nickname = "CosmoBot";
@@ -15,20 +19,55 @@ namespace RPSLS
 
         public override Move Play()
         {
-            if (a == b)
+            return MyMove(MarkovOneMove());
+        }
+
+        private Move MarkovTwoMove()
+        {
+            Move chance = Move.Lizard;
+            int temp = 0;
+            int temp2 = 0;
+            int j = 0;
+            for (int i = 0; i < 5; i++)
             {
-                return MyMove(a);
+                if (temp < markovcountTwo[i, (int)_oponentMove, j])
+                {
+                    temp = markovcountTwo[i, (int)_oponentMove, j];
+                    for (; j < 5; j++)
+                    {
+                        if (temp2 < markovcountTwo[i, (int)_oponentMove, j])
+                        {
+                            temp2 = markovcountTwo[i, (int)_oponentMove, j];
+                            //To do.
+                        }
+                    }
+                }            
             }
-            else
+            return RandomMove();
+        }
+
+        private Move MarkovOneMove()
+        {
+            Move chance = Move.Lizard;
+            int temp = 0;
+            for (int i= 0; i < 5; i++)
             {
-                return GetWhoBeats(b);
+                if (temp < markovCount[i, (int)_oponentMove])
+                {
+                    temp = markovCount[i, (int)_oponentMove];
+                    chance = (Move)i;
+                }
             }
+            return chance;
         }
 
         public override void Observe(Move opponentMove)
         {
-            b = a;
-            a = opponentMove;
+            _opponentMovePlusPlus = _oponentMovePlus;
+            _oponentMovePlus = _oponentMove;
+            _oponentMove = opponentMove;
+            markovCount[(int)opponentMove, (int)_oponentMovePlus]++;
+            markovcountTwo[(int)opponentMove, (int)_oponentMovePlus, (int)_opponentMovePlusPlus]++;
         }
 
         private Move MyMove(Move _spectedMove)
@@ -74,7 +113,7 @@ namespace RPSLS
                     return Move.Rock;
                 default:
                     return Move.Scissors;
-               
+
             }
         }
     }

@@ -1,84 +1,117 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace RPSLS
-{
-    class RUAX : StudentAI
-    {
-        private readonly Move[] a;
-        private int b = 0;
+namespace RPSLS {
+    internal class RUAX : StudentAI {
+        private readonly Move[] EnemyMoves;
+        private int currentEnemyMove = -1;
+        private List<Move> enemyMoveSequence;
+        private bool listInitialized;
 
-        public RUAX()
-        {
+        private int[] moveStartIndexFrequency;
+        private readonly int[,] statistics = new int[5, 5];
+        private readonly int[,,] statisticsMarkovTwo = new int[5, 5, 5];
+
+        public RUAX() {
             CourseSection = Section.S07250;
             Nickname = "Ruan Xun";
-            a = new Move[100];
+            EnemyMoves = new Move[100];
         }
 
 
-        public override void Observe(Move opponentMove)
-        {
-            a[b++] = opponentMove;
+        public override void Observe(Move opponentMove) {
+            EnemyMoves[++currentEnemyMove] = opponentMove;
         }
 
-        public override Move Play()
-        {
-            if (b < 1)
-            {
-                return (Move)Game.SeededRandom.Next(0, 5);
-            }
-            else if (b < 2)
-            {
-                return CounterMove(circularMoves[(int)(a[b - 1] + 1) % 5]);
-            }
-            else
-            {
-                return AnalyseEnemy();
-            }
-
-
+        public override Move Play() {
+            return AgainstMarkovEnemy();
+//            return AgainstShakespeare();
         }
 
-        private Move AnalyseEnemy()
-        {
-            if (CheckIsOneTrickPlayer())
-            {
-                return CounterMove(a[b - 1]);
-
+        private Move AgainstShakespeare() {
+            if (!listInitialized) {
+                listInitialized = true;
+                enemyMoveSequence = ShakespeareAI.CreateSequence();
+                moveStartIndexFrequency = new int[enemyMoveSequence.Count];
             }
 
-            else if (CheckIsCircularPlayer())
-            {
-                Move lastEnemyMove = a[b - 1];
-                Move nextMove = Move.Paper;
-                ;
-                for (int i = 0; i < circularMoves.Length; i++)
-                {
-                    if (lastEnemyMove == circularMoves[i])
-                    {
-                        nextMove = (Move)circularMoves[(i + 1) % 5];
-                        break;
-                    }
+            if (currentEnemyMove < 0) return RandomMove();
+
+            for (var i = 0; i < moveStartIndexFrequency.Length; i++)
+                if (i + currentEnemyMove < enemyMoveSequence.Count &&
+                    enemyMoveSequence[i + currentEnemyMove] == EnemyMoves[currentEnemyMove])
+                    moveStartIndexFrequency[i]++;
+
+            var maxIndex = -1;
+            var maxTimes = -1;
+            for (var i = 0; i < moveStartIndexFrequency.Length; i++)
+                if (moveStartIndexFrequency[i] >= maxTimes) {
+                    maxTimes = moveStartIndexFrequency[i];
+                    maxIndex = i;
                 }
 
-                return CounterMove(nextMove);
+            //if (currentEnemyMove == 98) Console.WriteLine("Max times = " + maxTimes);
 
-            }
-            else
-            {
-                return (Move)Game.SeededRandom.Next(5);
-            }
+            if (maxIndex + currentEnemyMove + 1 > enemyMoveSequence.Count - 1) return RandomMove();
 
+            return CounterMove(enemyMoveSequence[maxIndex + currentEnemyMove + 1]);
         }
 
-        private bool CheckIsCircularPlayer()
-        {
-            return a[0] != a[1];
+        private Move AgainstMarkovEnemy() {
+// Play against markov one ai
+            if (currentEnemyMove <= 0) return RandomMove();
+
+            statistics[(int) EnemyMoves[currentEnemyMove - 1], (int) EnemyMoves[currentEnemyMove]]++;
+            var maxIndexMarkovOne = -1;
+            var maxTimesMarkovOne = 0;
+
+            var total = 0;
+            for (var i = 0; i < 5; i++) {
+                total += statistics[(int) EnemyMoves[currentEnemyMove], i];
+                if (statistics[(int) EnemyMoves[currentEnemyMove], i] > maxTimesMarkovOne) {
+                    maxTimesMarkovOne = statistics[(int) EnemyMoves[currentEnemyMove], i];
+                    maxIndexMarkovOne = i;
+                }
+            }
+
+//            if (currentEnemyMove >= 100) {
+//                if ((double) maxTimesMarkovOne / total >= 0.5) return CounterMove((Move) maxIndexMarkovOne);
+//            }
+
+            if (currentEnemyMove <= 1) return RandomMove();
+
+            statisticsMarkovTwo[(int) EnemyMoves[currentEnemyMove - 2], (int) EnemyMoves[currentEnemyMove - 1],
+                (int) EnemyMoves[currentEnemyMove]]++;
+            var maxIndexMarkovTwo = -1;
+            var maxMarkovTwoTimes = 0;
+            var totalMarkovTwo = 0;
+            for (var i = 0; i < 5; i++) {
+                totalMarkovTwo += statisticsMarkovTwo[(int) EnemyMoves[currentEnemyMove - 1],
+                    (int) EnemyMoves[currentEnemyMove], i];
+                if (statisticsMarkovTwo[(int) EnemyMoves[currentEnemyMove - 1], (int) EnemyMoves[currentEnemyMove], i] >
+                    maxMarkovTwoTimes) {
+                    maxMarkovTwoTimes = statisticsMarkovTwo[(int) EnemyMoves[currentEnemyMove - 1],
+                        (int) EnemyMoves[currentEnemyMove], i];
+                    maxIndexMarkovTwo = i;
+                }
+            }
+
+//            if (currentEnemyMove == 98) Console.WriteLine(maxTimesMarkovOne + " " + maxMarkovTwoTimes * 5);
+//            if (maxTimesMarkovOne > maxMarkovTwoTimes * 5) {
+//                return CounterMove((Move) maxIndexMarkovOne);
+//            }
+//            else {
+
+            if ((currentEnemyMove > 6 && currentEnemyMove <70) && (double) maxMarkovTwoTimes / totalMarkovTwo >= 0.5)
+                return CounterMove((Move) maxIndexMarkovTwo);
+            else {
+            }
+            
+            return AgainstShakespeare();
         }
 
-        private Move CounterMove(Move move)
-        {
-            switch (move)
-            {
+        private Move CounterMove(Move move) {
+            switch (move) {
                 case Move.Paper:
                 case Move.Lizard:
                     return Move.Scissors;
@@ -87,20 +120,6 @@ namespace RPSLS
                 default:
                     return Move.Paper;
             }
-        }
-
-        private readonly Move[] circularMoves = new Move[]
-        {
-            Move.Scissors,
-            Move.Paper,
-            Move.Rock,
-            Move.Lizard,
-            Move.Spock
-        };
-
-        private bool CheckIsOneTrickPlayer()
-        {
-            return a[0] == a[1];
         }
     }
 }

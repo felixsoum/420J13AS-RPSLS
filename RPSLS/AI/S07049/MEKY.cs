@@ -4,10 +4,12 @@ namespace RPSLS
 {
     class MEKY : StudentAI
     {
-       int a;
-       Move b;
+        //FIND A WAY TO DETECT WHICH AI IS PLAYING AND CALL THE COUNTER METHOD ??
+        //
+       int indexTheOfMove;
+       Move Lastopponentmove;
         
-       public Move[] c = new Move[] {
+       public Move[] CounterCircularOpponent = new Move[] {
             Move.Scissors,
             Move.Paper,
             Move.Rock,
@@ -26,40 +28,43 @@ namespace RPSLS
         public override Move Play()
         {
               return AgainstCircularAI();
+             //return PlayAgainstAll();
+        
         }
 
         public override void Observe(Move opponentMove)
         {
-           b = opponentMove;
+           Lastopponentmove = opponentMove;
             
         }
 
+        //Method to play in tournament 
         public Move PlayAgainstAll()
         {
-            if (b == Move.Rock)
+            if (Lastopponentmove == Move.Rock)
             {
                 return Move.Paper;
 
             }
 
-            else if (b == Move.Paper)
+            else if (Lastopponentmove == Move.Paper)
             {
                 return Move.Scissors;
 
             }
 
-            else if (b == Move.Scissors)
+            else if (Lastopponentmove == Move.Scissors)
             {
                 return Move.Rock;
 
             }
 
-            else if (b == Move.Lizard)
+            else if (Lastopponentmove == Move.Lizard)
             {
                 return Move.Scissors;
             }
 
-            else if (b == Move.Spock)
+            else if (Lastopponentmove == Move.Spock)
             {
                 return Move.Paper;
             }
@@ -72,40 +77,40 @@ namespace RPSLS
         }
         public Move AgainstCircularAI()
         {
-            if (b == Move.Rock)
+            if (Lastopponentmove == Move.Rock)
             {
-                a = 2;
-                return c[a++];
+                indexTheOfMove = 2;
+                return CounterCircularOpponent[indexTheOfMove++];
                
             }
 
-            else if (b == Move.Paper)
+            else if (Lastopponentmove == Move.Paper)
             {
-                a = 1;
-                return c[a++];
+                indexTheOfMove = 1;
+                return CounterCircularOpponent[indexTheOfMove++];
 
             }
 
-            else if (b == Move.Scissors)
+            else if (Lastopponentmove == Move.Scissors)
             {
-                a = 0;
+                indexTheOfMove = 0;
 
-                return c[a++];
+                return CounterCircularOpponent[indexTheOfMove++];
 
             }
 
 
-            else if (b == Move.Lizard)
+            else if (Lastopponentmove == Move.Lizard)
             {
-                a = 3;
-                return c[a++];
+                indexTheOfMove = 3;
+                return CounterCircularOpponent[indexTheOfMove++];
             }
 
-            else if (b == Move.Spock)
+            else if (Lastopponentmove == Move.Spock)
             {
-                a = 4;
+                indexTheOfMove = 4;
 
-                return c[a++];
+                return CounterCircularOpponent[indexTheOfMove++];
                 
             }
 

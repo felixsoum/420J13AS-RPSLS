@@ -16,7 +16,7 @@ namespace RPSLS
         static bool isInstantiated;
         public static int Mutex { get; private set; }
         public static Random SeededRandom { get; private set; }
-        const int Seed = 2019;
+        const int Seed = 2019;// 07 + 14 + 18 + 26 + 31 + 32;
         const int BattleCount = 20;
         readonly Type studentAI;
 
@@ -256,9 +256,10 @@ namespace RPSLS
 
             int studentCount = contestants.Count;
             Console.WriteLine($"\n{studentCount} students entered in tournament.\n");
+            Console.WriteLine($"Some student AIs are slow, so please be patient and wait.\n");
 
             int dummyIndex = 0;
-            var dummyTypes = new Type[] { typeof(FavoriteOneAI), typeof(FavoriteTwoAI), typeof(RepeaterAI)};
+            var dummyTypes = new Type[] { typeof(MarkovOneAI), typeof(MarkovTwoAI), typeof(ShakespeareAI) };
             Type currentDummyType = null;
             for (int i = 0; i < studentCount * 9; i++)
             {

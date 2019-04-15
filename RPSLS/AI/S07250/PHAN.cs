@@ -1,91 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace RPSLS
+﻿namespace RPSLS
 {
     class PHAN : StudentAI
     {
-        private bool a = false;
-        private Move? b = null;
-        private List<Move> c = new List<Move>();
-        private Dictionary<Move, bool> d = new Dictionary<Move, bool>();
+        int[,,] data = new int[5, 5, 5];
+        Move? prev = null;
+        Move? prev2 = Move.Rock;
+
 
         public PHAN()
         {
-            Nickname = "OnePlus - Flaship Killer";
+            Nickname = "Minh Phan";
             CourseSection = Section.S07250;
+        }
+
+
+        public override Move Play()
+        {
+            if (!prev.HasValue)
+            {
+                return RandomMove();
+            }
+            else
+            {
+                Move bestMove = Move.Rock;
+                int bestCount = -1;
+                for (int i = 0; i < 5; i++)
+                {
+                    int currentCount = data[(int)prev, (int)prev2, i];
+                    if (currentCount > bestCount)
+                    {
+                        bestMove = (Move)i;
+                        bestCount = currentCount;
+                    }
+                }
+
+
+                switch (bestMove)
+                {
+                    case Move.Rock:
+                    case Move.Scissors:
+                        return Move.Spock;
+                    case Move.Paper:
+                    case Move.Lizard:
+                        return Move.Scissors;
+                    case Move.Spock:
+                        return Move.Lizard;
+                    default:
+                        return Move.Lizard;
+                }
+            }
         }
 
         public override void Observe(Move opponentMove)
         {
-            b = opponentMove;
-            c.Add(opponentMove);
-            if (!d.ContainsKey(opponentMove))
+            if (prev.HasValue)
             {
-                d.Add(opponentMove, true);
+                data[(int)prev, (int)prev2, (int)opponentMove]++;
             }
+            prev = prev2;
+            prev2 = opponentMove;
         }
-
-        public override Move Play()
-        {
-            if (b.HasValue)
-            {
-                var isPattern = IsPattern();
-                if (!isPattern)
-                {
-                    switch (b.Value)
-                    {
-                        case Move.Paper:
-                        case Move.Lizard:
-                            return Move.Scissors;
-                        case Move.Rock:
-                        case Move.Spock:
-                            return Move.Paper;
-                        case Move.Scissors:
-                        default:
-                            return Move.Rock;
-                    }
-                }
-                else
-                {
-                    if (c.Count >= 5)
-                    {
-                        var idxOfLastMoveAI = d.Keys.ToList().IndexOf(b.Value);
-                        for (int i = 0; i < d.Keys.Count; i++)
-                        {
-                            if (i == (idxOfLastMoveAI + 1) % 5)
-                            {
-                                return b.Value;
-                            }
-                        }
-                    }
-                    return RandomMove();
-                }
-            }
-            else
-            {
-                return RandomMove();
-            }
-        }
-
-
-        private bool IsPattern()
-        {
-            int sumOfElements = 0;
-            foreach (var item in d.Values)
-            {
-                if (item == true)
-                {
-                    sumOfElements += 1;
-                }
-            }
-            if (a == false && sumOfElements == 5 && c.Count == 5)
-            {
-                a = true;
-            }
-            return a;
-        }
-
     }
 }

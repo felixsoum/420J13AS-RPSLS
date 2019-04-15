@@ -5,9 +5,9 @@ namespace RPSLS
 {
     class AMAA : StudentAI
     {
-        public Move a;
-        public List<Move> b = new List<Move>();
-        int c = 0;
+        int[,] data = new int[5, 5];
+        int[,,] dataCh2 = new int[5, 5, 5];
+        Move? prev = null;
 
         public AMAA()
         {
@@ -17,57 +17,56 @@ namespace RPSLS
 
         public override Move Play()
         {
-            if (c > 2)
+            if (!prev.HasValue)
             {
-                if (a != b[b.Count - 2])
-                {
-                    return a;
-                }
-
-                else
-                {
-                    return MyMove(a);
-                }
+                return RandomMove();
             }
-
             else
             {
-                c++;
-                return Move.Spock;
+                Move bestMove = Move.Rock;
+                int bestCount = -1;
+                for(int i = 0; i < 5; i++)
+                {
+                    int currentCount = data[(int)prev, i];
+                    if(currentCount > bestCount)
+                    {
+                        bestMove = (Move)i;
+                        bestCount = currentCount;
+                    }
+                }
+                if(bestMove == Move.Rock)
+                {
+                    return Move.Spock;
+                }
+                else if(bestMove == Move.Scissors)
+                {
+                    return Move.Spock;
+                }
+                else if(bestMove == Move.Lizard)
+                {
+                    return Move.Scissors;
+                }
+                else if(bestMove == Move.Paper)
+                {
+                    return Move.Scissors;
+                }
+                else if(bestMove == Move.Spock)
+                {
+                    return Move.Paper;
+                }
+                return RandomMove();
             }
+          
 
         }
 
         public override void Observe(Move opponentMove)
         {
-            a = opponentMove;
-            b.Add(a);
-        }
-
-        private Move MyMove(Move enemyMove)
-        {
-            if (enemyMove == Move.Rock)
+           if(prev.HasValue)
             {
-                return Move.Spock;
+                data[(int)prev, (int)opponentMove]++;
             }
-            else if (enemyMove == Move.Scissors)
-            {
-                return Move.Spock;
-            }
-            else if (enemyMove == Move.Lizard)
-            {
-                return Move.Scissors;
-            }
-            else if (enemyMove == Move.Paper)
-            {
-                return Move.Scissors;
-            }
-            else if (enemyMove == Move.Spock)
-            {
-                return Move.Paper;
-            }
-
-            return RandomMove();
+            prev = opponentMove;
         }
 
     }

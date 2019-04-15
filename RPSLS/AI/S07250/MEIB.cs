@@ -1,26 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RPSLS
 {
 
     class MEIB : StudentAI
     {
-        Move? a = null;
-        public float b = 0f;
-        public float c = 0f;
-
-        readonly Move[] myMoves = new Move[]
-        {
-            Move.Scissors,
-            Move.Paper,
-            Move.Rock,
-            Move.Lizard,
-            Move.Spock
-        };
-
-
-
-
+        int[,,] table = new int[5, 5, 5];
+        Move? prevMove = null;
+        Move? prevMoveSecond = Move.Rock;
 
 
         public MEIB()
@@ -32,64 +21,63 @@ namespace RPSLS
 
         public override void Observe(Move opponentMove)
         {
-            a = opponentMove;
+            if (prevMove.HasValue)
+            {
+                table[(int)prevMove, (int)prevMoveSecond, (int)opponentMove]++;
+            }
+            prevMove = prevMoveSecond;
+            prevMoveSecond = opponentMove;
         }
 
         public override Move Play()
         {
-            if (a.HasValue)
+
+            if (!prevMove.HasValue)
             {
-
-
-                if (a.Value == Move.Rock && a.Value == Move.Spock)
+                return RandomMove();
+            }
+            else if(prevMove.HasValue)
+            {
+                Move bestMove = Move.Spock;
+                Move bestMoveSecond = Move.Spock;
+                int bestCount = -1;
+                for (int i = 0; i < 5; i++)
                 {
-                    return Move.Paper;
+                    int currentCount = table[(int)prevMove, (int)prevMoveSecond, i];
+                    if (currentCount > bestCount)
+                    {
+                        bestMove = (Move)i;
+                        bestCount = currentCount;
+                        bestMoveSecond = (Move)i;
+                    }
                 }
 
-                if (a.Value == Move.Paper && a.Value == Move.Lizard)
+                
+                switch (bestMove)
                 {
-                    return Move.Scissors;
+                    case Move.Rock:
+                    case Move.Scissors:
+                        return Move.Spock;
+                    case Move.Paper:
+                    case Move.Lizard:
+                        return Move.Scissors;
+                    case Move.Spock:
+                        return Move.Lizard;
+                    default:
+                        return Move.Lizard;
                 }
 
-
-                if (a.Value == Move.Paper && a.Value == Move.Spock)
-                {
-                    return Move.Lizard;
-                }
-                if (a.Value == Move.Scissors && a.Value == Move.Lizard)
-                {
-                    return Move.Rock;
-                }
-                else
-                {
-                    return RandomMove();
-                }
+                
             }
             else
             {
                 return RandomMove();
             }
+           
 
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
 
 }

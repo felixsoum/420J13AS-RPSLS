@@ -57,6 +57,7 @@
     <Compile Include="AI\Dummy\RockOnlyAI.cs" />
     <Compile Include="AI\Dummy\ScissorsOnlyAI.cs" />
     <Compile Include="AI\Dummy\ShakespeareAI.cs" />
+    <Compile Include="AI\LastSolution.cs" />
     <Compile Include="AI\S07049\BOLU.cs" />
     <Compile Include="AI\S07049\PAQS.cs" />
     <Compile Include="AI\S07049\GORT.cs" />
